@@ -31,27 +31,6 @@ const writeCsv = (path, data) => {
   return csv.toDisk(path);
 };
 
-const getPuppeteerBrowser = (headless) => {
-  const headlessConfig = headless || false;
-  const puppeteer = require("puppeteer-extra");
-  const StealthPlugin = require("puppeteer-extra-plugin-stealth");
-  puppeteer.use(StealthPlugin());
-  const AdblockerPlugin = require("puppeteer-extra-plugin-adblocker");
-  puppeteer.use(AdblockerPlugin({ blockTrackers: true }));
-  return puppeteer.launch({
-    headless: headlessConfig,
-    ignoreHTTPSErrors: true,
-    slowMo: 0,
-    args: [
-      "--window-size=1400,900",
-      "--remote-debugging-port=9222",
-      "--remote-debugging-address=0.0.0.0", // You know what your doing?
-      "--disable-gpu",
-      "--disable-features=IsolateOrigins,site-per-process",
-      "--blink-settings=imagesEnabled=true",
-    ],
-  });
-};
 const deepClone = (object) => {
   return JSON.parse(JSON.stringify(object));
 };
@@ -64,24 +43,34 @@ const getDomParser = () => {
   var DomParser = require("dom-parser");
   return new DomParser();
 };
-const getJson = (url) => {
-  return new Promise((resolve, reject) => {
-    axios
-      .get(url)
-      .then((response) => resolve(response.data))
-      .catch(reject);
-  });
-};
-const getHtml = (url, cookieString) => {
+
+const get = (url, headers) => {
   return new Promise((resolve, reject) => {
     axios
       .get(url, {
         headers: {
           "User-Agent": "PostmanRuntime/7.28.2",
-          Cookie: cookieString,
+          ...headers,
         },
       })
       .then((response) => resolve(response.data))
+      .catch(reject);
+  });
+};
+const post = (url, headers, data) => {
+  console.log("axios data ", headers);
+
+  return new Promise((resolve, reject) => {
+    axios
+      .post(url, data, {
+        headers: {
+          "User-Agent": "PostmanRuntime/7.28.2",
+          Accept: "*/*",
+          "Content-Type": "application/x-www-form-urlencoded",
+          ...headers,
+        },
+      })
+      .then((response) => console.log(response))
       .catch(reject);
   });
 };
@@ -117,15 +106,14 @@ const download_image = (url, image_path) =>
 module.exports = {
   readCsv,
   writeCsv,
-  getPuppeteerBrowser,
   getDomParser,
   sleep,
   deepClone,
   getAbsPath,
   pathExists,
-  getJson,
   download_image,
-  getHtml,
+  get,
+  post,
   getHeaders_GET,
   getResponse_GET,
 };
