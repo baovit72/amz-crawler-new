@@ -64,23 +64,55 @@ const getDomParser = () => {
   var DomParser = require("dom-parser");
   return new DomParser();
 };
-const getJson = (url)=>{
+const getJson = (url) => {
   return new Promise((resolve, reject) => {
-    axios.get(url).then((response=>resolve(response.data))).catch(reject)
-  })
-}
+    axios
+      .get(url)
+      .then((response) => resolve(response.data))
+      .catch(reject);
+  });
+};
+const getHtml = (url, cookieString) => {
+  return new Promise((resolve, reject) => {
+    axios
+      .get(url, {
+        headers: {
+          "User-Agent": "PostmanRuntime/7.28.2",
+          Cookie: cookieString,
+        },
+      })
+      .then((response) => resolve(response.data))
+      .catch(reject);
+  });
+};
+const getHeaders_GET = (url) => {
+  return new Promise((resolve, reject) => {
+    axios
+      .get(url, { headers: { "User-Agent": "PostmanRuntime/7.28.2" } })
+      .then((response) => resolve(response.headers))
+      .catch(reject);
+  });
+};
+const getResponse_GET = (url) => {
+  return new Promise((resolve, reject) => {
+    axios
+      .get(url, { headers: { "User-Agent": "PostmanRuntime/7.28.2" } })
+      .then((response) => resolve(response))
+      .catch(reject);
+  });
+};
 const download_image = (url, image_path) =>
   axios({
     url,
-    responseType: 'stream',
+    responseType: "stream",
   }).then(
-    response =>
+    (response) =>
       new Promise((resolve, reject) => {
         response.data
           .pipe(fs.createWriteStream(image_path))
-          .on('finish', () => resolve())
-          .on('error', e => reject(e));
-      }),
+          .on("finish", () => resolve())
+          .on("error", (e) => reject(e));
+      })
   );
 module.exports = {
   readCsv,
@@ -92,5 +124,8 @@ module.exports = {
   getAbsPath,
   pathExists,
   getJson,
-  download_image
+  download_image,
+  getHtml,
+  getHeaders_GET,
+  getResponse_GET,
 };
