@@ -1,0 +1,60 @@
+Arguments: 
+  C:\Program Files\nodejs\node.exe C:\Users\LAP12881-local\AppData\Roaming\npm\node_modules\yarn\bin\yarn.js
+
+PATH: 
+  C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\WINDOWS\System32\OpenSSH\;C:\Program Files\Intel\WiFi\bin\;C:\Program Files\Common Files\Intel\WirelessCommon\;C:\Program Files\Git\cmd;C:\ProgramData\chocolatey\bin;C:\Program Files\nodejs\;C:\Program Files\OpenJDK\openjdk-8u282-b08\bin;C:\tools\php80;C:\ProgramData\ComposerSetup\bin;C:\tools\php73;C:\Users\LAP12881-local\AppData\Local\Programs\Microsoft VS Code\bin;C:\platform-tools;C:\Users\LAP12881-local\AppData\Roaming\npm;C:\Users\LAP12881-local\AppData\Local\Android\Sdk\platform-tools;C:\Python27;C:\Users\LAP12881-local\AppData\Local\Microsoft\WindowsApps;C:\Users\LAP12881-local\AppData\Roaming\Composer\vendor\bin;C:\tools\mysql\current\bin;
+
+Yarn version: 
+  1.22.10
+
+Node version: 
+  15.14.0
+
+Platform: 
+  win32 x64
+
+Trace: 
+  SyntaxError: C:\Users\LAP12881-local\Desktop\csv-puppeteer-template\package.json: Unexpected token } in JSON at position 797
+      at JSON.parse (<anonymous>)
+      at C:\Users\LAP12881-local\AppData\Roaming\npm\node_modules\yarn\lib\cli.js:1625:59
+      at Generator.next (<anonymous>)
+      at step (C:\Users\LAP12881-local\AppData\Roaming\npm\node_modules\yarn\lib\cli.js:310:30)
+      at C:\Users\LAP12881-local\AppData\Roaming\npm\node_modules\yarn\lib\cli.js:321:13
+
+npm manifest: 
+  {
+    "name": "csv-puppeteer-template",
+    "version": "1.0.0",
+    "description": "",
+    "main": "index.js",
+    "scripts": {
+      "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "repository": {
+      "type": "git",
+      "url": "git+https://github.com/baovit72/teepublictagget.git"
+    },
+    "author": "",
+    "license": "ISC",
+    "bugs": {
+      "url": "https://github.com/baovit72/teepublictagget/issues"
+    },
+    "homepage": "https://github.com/baovit72/teepublictagget#readme",
+    "dependencies": {
+      "axios": "^0.21.1",
+      "csv-parser": "^3.0.0",
+      "csv-writer": "^1.6.0",
+      "dom-parser": "^0.1.6",
+      "objects-to-csv": "^1.3.6",
+      "puppeteer": "^9.1.1",
+      "puppeteer-extra": "^3.1.18",
+      "puppeteer-extra-plugin-adblocker": "^2.11.11",
+      "puppeteer-extra-plugin-stealth": "^2.7.8", 
+    }
+  }
+
+yarn manifest: 
+  No manifest
+
+Lockfile: 
+  No lockfile
