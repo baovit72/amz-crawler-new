@@ -10,20 +10,24 @@ function textToSlug(text) {
     .replace(/ +/g, "+");
 }
 function filterName(name, whitelist, blacklist) {
-  function nameContaisWords(list) {
+  function nameContaisWords(list, isWhitelist) {
     const splittedList = list
       .split(",")
       .map((item) => item.trim().toLowerCase());
+    if (!splittedList.length) return isWhitelist;
     return (
       splittedList.findIndex(
         (item) => item.length && name.toLowerCase().includes(item)
       ) >= 0
     );
   }
-  const isWhitelisted = nameContaisWords(whitelist);
-  const isBlacklisted = nameContaisWords(blacklist);
+  const isWhitelisted = nameContaisWords(whitelist, true);
+  const isBlacklisted = nameContaisWords(blacklist, false);
   console.log(name, isWhitelisted, isBlacklisted, whitelist, blacklist);
-  return isWhitelisted || !isBlacklisted;
+
+  if (isBlacklisted) return false;
+  if (isWhitelisted) return true;
+  return false;
 }
 function getQuery(url, pageNum) {
   const QUERY_URL = url + `&page=${pageNum}`;
@@ -128,7 +132,7 @@ async function getProducts(
     .filter((v, i, a) => a.findIndex((t) => t.image === v.image) === i);
   for (let j = 0; j < products.length; j++) {
     const { image } = products[j];
-    const outputDir = `./${topic}/${image_prefix}`;
+    const outputDir = `./output/${topic}/${image_prefix}`;
 
     fs.mkdirSync(outputDir, { recursive: true });
     try {
@@ -153,6 +157,9 @@ async function run() {
   for (let i = 0; i < iData.length; i++) {
     const item = iData[i];
     try {
+      console.log(
+        "----------------------------------------*------------------*--------------------------------"
+      );
       console.log("BEGIN WITH URL: ", item.url);
       const { cookieString, token } = await getCSRF();
       console.log("DONE GET COOKIES WITH VALUES: ", cookieString);
@@ -195,7 +202,10 @@ async function run() {
           Cookie: cookieString,
         }
       );
-      await utils.writeCsv("output.csv", list);
+      await utils.writeCsv(
+        `./output/${item.topic}/${item.image_prefix}/output.csv`,
+        list
+      );
     } catch (error) {
       console.log(error);
     }
