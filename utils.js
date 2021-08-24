@@ -43,6 +43,11 @@ const getDomParser = () => {
   var DomParser = require("dom-parser");
   return new DomParser();
 };
+const getDom = (html) => {
+  const jsdom = require("jsdom");
+  const { JSDOM } = jsdom;
+  return new JSDOM(html);
+};
 
 const get = (url, headers) => {
   return new Promise((resolve, reject) => {
@@ -58,8 +63,6 @@ const get = (url, headers) => {
   });
 };
 const post = (url, headers, data) => {
-  console.log("axios data ", headers);
-
   return new Promise((resolve, reject) => {
     axios
       .post(url, data, {
@@ -70,7 +73,7 @@ const post = (url, headers, data) => {
           ...headers,
         },
       })
-      .then((response) => console.log(response))
+      .then((response) => resolve(response.data))
       .catch(reject);
   });
 };
@@ -116,4 +119,5 @@ module.exports = {
   post,
   getHeaders_GET,
   getResponse_GET,
+  getDom,
 };
