@@ -23,7 +23,6 @@ function filterName(name, whitelist, blacklist) {
   }
   const isWhitelisted = nameContaisWords(whitelist, true);
   const isBlacklisted = nameContaisWords(blacklist, false);
-  console.log(name, isWhitelisted, isBlacklisted, whitelist, blacklist);
 
   if (isBlacklisted) return false;
   if (isWhitelisted) return true;
@@ -61,6 +60,7 @@ async function getZipChangeCSRF(headers) {
       ...headers,
     }
   );
+  // console.log(rex.exec(html));
   return {
     token: rex.exec(html)[1],
   };
@@ -90,23 +90,26 @@ async function getProducts(
       `*[cel_widget_id*='MAIN-SEARCH_RESULTS']`
     );
     const rs = [];
-    products.forEach((product) =>
-      rs.push({
-        title: product.querySelector("span.a-text-normal").textContent,
-        image: product.querySelector(".s-image").getAttribute("src"),
-        url:
-          "https://www.amazon.com" +
-          product
-            .querySelector(
-              "*[data-component-type='s-product-image'] a.a-link-normal"
-            )
-            .getAttribute("href"),
-      })
-    );
+    products.forEach((product) => {
+      try {
+        rs.push({
+          title: product.querySelector("span.a-text-normal").textContent,
+          image: product.querySelector(".s-image").getAttribute("src"),
+          url:
+            "https://www.amazon.com" +
+            product
+              .querySelector(
+                "*[data-component-type='s-product-image'] a.a-link-normal"
+              )
+              .getAttribute("href"),
+        });
+      } catch {}
+    });
     return rs;
   }
 
   let firstPageHtml = await utils.get(url, headers);
+  await utils.writeCsv(`./debug.csv`, [{ firstPageHtml }]);
   let products = parseProductsFromHtml(firstPageHtml);
   const dom = utils.getDom(firstPageHtml);
   const paginationLis =
@@ -115,6 +118,7 @@ async function getProducts(
     +paginationLis[paginationLis.length - 2].textContent,
     limit_page_number
   );
+  console.log("pageNum", pageNum);
 
   for (let i = 2; i <= pageNum; i++) {
     try {
@@ -154,6 +158,7 @@ async function getProducts(
 async function run() {
   const iData = await utils.readCsv("./input.csv");
   // console.log(iData);
+
   for (let i = 0; i < iData.length; i++) {
     const item = iData[i];
     try {
@@ -166,6 +171,7 @@ async function run() {
       const zipCsrfCode = (
         await getZipChangeCSRF(getCSRFHeaders(cookieString, token))
       ).token;
+
       console.log("DONE GET ZIPCODE CHANGE HEADERS WITH VALUES: ", zipCsrfCode);
 
       const params = new URLSearchParams();
@@ -202,6 +208,7 @@ async function run() {
           Cookie: cookieString,
         }
       );
+      console.log(list);
       await utils.writeCsv(
         `./output/${item.topic}/${item.image_prefix}/output.csv`,
         list

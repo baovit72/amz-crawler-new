@@ -54,7 +54,9 @@ const get = (url, headers) => {
     axios
       .get(url, {
         headers: {
-          "User-Agent": "PostmanRuntime/7.28.2",
+          Referer: "https://www.amazon.com/",
+          "User-Agent":
+            "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.212 Safari/537.36",
           ...headers,
         },
       })
@@ -67,7 +69,8 @@ const post = (url, headers, data) => {
     axios
       .post(url, data, {
         headers: {
-          "User-Agent": "PostmanRuntime/7.28.2",
+          "User-Agent":
+            "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.212 Safari/537.36",
           Accept: "*/*",
           "Content-Type": "application/x-www-form-urlencoded",
           ...headers,
@@ -80,7 +83,12 @@ const post = (url, headers, data) => {
 const getHeaders_GET = (url) => {
   return new Promise((resolve, reject) => {
     axios
-      .get(url, { headers: { "User-Agent": "PostmanRuntime/7.28.2" } })
+      .get(url, {
+        headers: {
+          "User-Agent":
+            "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.212 Safari/537.36",
+        },
+      })
       .then((response) => resolve(response.headers))
       .catch(reject);
   });
@@ -88,7 +96,13 @@ const getHeaders_GET = (url) => {
 const getResponse_GET = (url) => {
   return new Promise((resolve, reject) => {
     axios
-      .get(url, { headers: { "User-Agent": "PostmanRuntime/7.28.2" } })
+      .get(url, {
+        headers: {
+          Cookie: "",
+          "User-Agent":
+            "Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.212 Mobile Safari/537.36",
+        },
+      })
       .then((response) => resolve(response))
       .catch(reject);
   });
